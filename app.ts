@@ -10,6 +10,7 @@ class Board {
   private _popup: HTMLElement;
   private _cellsAmount: number;
   private _gameBody: HTMLElement;
+  private _gameStarted: boolean;
 
   constructor(x: number = 3, y: number = 3) {
     this._gameBody = document.querySelector('.game');
@@ -18,6 +19,7 @@ class Board {
     this._cellsAmount = 0;
     this._cols = x;
     this._rows = y;
+    this._gameStarted = true;
 
     for (let i: number = 0; i < x; i++) {
       this._cells[i] = [];
@@ -37,6 +39,10 @@ class Board {
 
   set nextAction(value: string) {
     this._nextAction = value;
+  }
+
+  get gameStarted(): boolean {
+    return this._gameStarted;
   }
 
   private resetGame(that: Board): void {
@@ -83,6 +89,7 @@ class Board {
     title.innerText = titleValue;
     this._popup.appendChild(title);
     this._popup.classList.add('visible');
+    this._gameStarted = false;
 
     this.showRestartButton();
   }
@@ -100,7 +107,7 @@ class Board {
     let result: string;
 
     result = this.checkRows() || this.checkCols() || this.checkMainDiagonal() || this.checkAntiDiagonal();
-    if (result !== '') result += ' won';
+    if (result !== '') result += ' won!';
     if (result === '' && this._cellsAmount === 0) result = 'draw';
     if (result !== '') this.showPopup(result);
   }
@@ -202,7 +209,7 @@ class Cell {
   }
 
   private handleClick(that: Cell): void {
-    if (that.isFilled()) return;
+    if (that.isFilled() || that._board.gameStarted === false) return;
 
     const action: string = that._board.nextAction;
 

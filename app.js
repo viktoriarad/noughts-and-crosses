@@ -9,6 +9,7 @@ class Board {
         this._cellsAmount = 0;
         this._cols = x;
         this._rows = y;
+        this._gameStarted = true;
         for (let i = 0; i < x; i++) {
             this._cells[i] = [];
             for (let j = 0; j < y; j++) {
@@ -24,6 +25,9 @@ class Board {
     }
     set nextAction(value) {
         this._nextAction = value;
+    }
+    get gameStarted() {
+        return this._gameStarted;
     }
     resetGame(that) {
         that = new Board(that._cols, that._rows);
@@ -59,6 +63,7 @@ class Board {
         title.innerText = titleValue;
         this._popup.appendChild(title);
         this._popup.classList.add('visible');
+        this._gameStarted = false;
         this.showRestartButton();
     }
     hidePopup() {
@@ -72,7 +77,7 @@ class Board {
         let result;
         result = this.checkRows() || this.checkCols() || this.checkMainDiagonal() || this.checkAntiDiagonal();
         if (result !== '')
-            result += ' won';
+            result += ' won!';
         if (result === '' && this._cellsAmount === 0)
             result = 'draw';
         if (result !== '')
@@ -158,7 +163,7 @@ class Cell {
         element.addEventListener(event, () => callback(this));
     }
     handleClick(that) {
-        if (that.isFilled())
+        if (that.isFilled() || that._board.gameStarted === false)
             return;
         const action = that._board.nextAction;
         if (action === "cross") {
