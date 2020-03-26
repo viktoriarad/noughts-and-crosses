@@ -80,7 +80,7 @@ class Board {
   private showPopup(titleValue: string): void {
     const title: HTMLElement = document.createElement('h2');
 
-    title.innerText = titleValue + ' won!';
+    title.innerText = titleValue;
     this._popup.appendChild(title);
     this._popup.classList.add('visible');
 
@@ -100,6 +100,7 @@ class Board {
     let result: string;
 
     result = this.checkRows() || this.checkCols() || this.checkMainDiagonal() || this.checkAntiDiagonal();
+    if (result !== '') result += ' won';
     if (result === '' && this._cellsAmount === 0) result = 'draw';
     if (result !== '') this.showPopup(result);
   }

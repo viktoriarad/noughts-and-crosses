@@ -56,7 +56,7 @@ class Board {
     }
     showPopup(titleValue) {
         const title = document.createElement('h2');
-        title.innerText = titleValue + ' won!';
+        title.innerText = titleValue;
         this._popup.appendChild(title);
         this._popup.classList.add('visible');
         this.showRestartButton();
@@ -71,6 +71,8 @@ class Board {
     checkWinSituation() {
         let result;
         result = this.checkRows() || this.checkCols() || this.checkMainDiagonal() || this.checkAntiDiagonal();
+        if (result !== '')
+            result += ' won';
         if (result === '' && this._cellsAmount === 0)
             result = 'draw';
         if (result !== '')
